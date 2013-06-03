@@ -6,6 +6,12 @@ php helper to create a "checkRequirement" page for php application.
 It works with both Browser and CLI display.
 
 
+Screenshots
+==================
+![Screenshot](http://img4.hostingpics.net/pics/247689html.png)
+![Screenshot](http://img4.hostingpics.net/pics/611831cli.png)
+
+
 
 How To
 ==================
@@ -25,4 +31,6 @@ Check and Share !
 ==================
 
 Any pull request to add new checker is welcomed, or open issue if you are lazy !
+
+
 
