@@ -3,30 +3,61 @@
 $requirementsBag=array();
 $uniqueRequirementsBag=array();
 
-function addRequirement($name,$works){
+/**
+ * Add a requirement to the list of renders
+ * This function takes a global variable. Be safe when using it
+ * @param string $name text to show
+ * @param boolean $works true if the requirement works. 
+ */
+function addRequirement($name,$works=false){
     global $requirementsBag;
     $requirementsBag[]=array("works"=>$works,"name"=>$name);
 }
 
-function addUniqueRequirement($key,$name,$works){
+/**
+ * Add an unique requirement to the list.
+ * 
+ * Unique requirements are rendered before other requirements.
+ * They are sorted by key name.
+ * A straightforward naming convention for the names:
+ *      "SORT_NUMBER:TYPE:UNIQUE_NAME"
+ * E.G :   "0:EXTENSION:mysql" 
+ * (0 then it appears first in the list, "EXTENSION" means that is an extension and not for example an APACHE_MODULE and my is the name of the extension)
+ * 
+ * This function takes a global variable. Be safe when using it
+ * @global type $uniqueRequirementsBag
+ * @param string $key unique key. See above in the docblok
+ * @param string $name text to show
+ * @param boolean $works true if it works
+ */
+function addUniqueRequirement($key,$name,$works=false){
     global $uniqueRequirementsBag;
     
     $uniqueRequirementsBag[$key]=array("works"=>$works,"name"=>$name);
     
 }
 
+/**
+ * used for html render
+ */
 function renderWorks($name){
     
     include(__DIR__."/requirementTrue.php");
     
 }
 
+/**
+ * used for html render
+ */
 function renderBroken($name){
     
     include(__DIR__.'/requirementFalse.php');
     
 }
 
+/**
+ * render all depending if cli or browser
+ */
 function renderAllRequirements(){
     if("cli" == php_sapi_name())
         renderCli();
@@ -34,6 +65,9 @@ function renderAllRequirements(){
         renderHtml();
 }
 
+/**
+ * used for html render
+ */
 function renderHtml(){
     global $requirementsBag;
     global $uniqueRequirementsBag;
@@ -59,6 +93,10 @@ function renderHtml(){
     
 }
 
+
+/**
+ * used for CLI render
+ */
 function renderCli(){
     
     global $requirementsBag;
@@ -101,6 +139,9 @@ function renderCli(){
     
 }
 
+/**
+ * Check php version
+ */
 function phpNumberVersionIs($operator,$number){
     $version= floatval(substr(phpversion(),0,3));
     
@@ -129,6 +170,9 @@ function phpNumberVersionIs($operator,$number){
     
 }
 
+/**
+ * check if an extension is loaded
+ */
 function extensionAvailable($name){
     $isLoaded=extension_loaded($name);
     
@@ -144,6 +188,9 @@ function extensionAvailable($name){
 }
 
 
+/**
+ * check if an apache module is enabled
+ */
 function apacheModuleAvailable($name){
     $moduleAvailable=in_array($name, apache_get_modules());
     
@@ -153,7 +200,9 @@ function apacheModuleAvailable($name){
         addUniqueRequirement("2:APACHE:$name","Apache Module ".$name.' is not available',false);
 }
 
-
+/**
+ * check if a dir is writable
+ */
 function dirIsWritable($path){
     $isDir=  is_dir($path);
     
@@ -177,6 +226,9 @@ function dirIsWritable($path){
     }
 }
 
+/**
+ * check if a file is writable
+ */
 function fileIsWritable($path){
     $isFile= is_file($path);
     
@@ -200,6 +252,9 @@ function fileIsWritable($path){
     }
 }
 
+/**
+ * check if a mysql base is reachable
+ */
 function mysqlIsReachable($host,$user,$password){
     
     $loaded=  extensionAvailable("mysql");
@@ -218,3 +273,12 @@ function mysqlIsReachable($host,$user,$password){
     }
 
 }
+
+
+// TODO DB EXISTS
+// TODO TABLE EXISTS
+// TODO MONGO IS REACHABLE
+// TODO FILE EXISTS
+// TODO DIR EXISTS
+// TODO CLASS EXISTS
+// TODO COMPOSER WAS LOADED
