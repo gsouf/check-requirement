@@ -14,8 +14,6 @@ mysqlIsReachable("localhost","root","root"); // will also check for mysql extens
 
 phpNumberVersionIs(">=", "5.4"); // also available operators :   ==   >  <   =<  =>
 
-
-
 /********************
  * 
  * ABOUT FILE SYSTEM : 
@@ -30,6 +28,22 @@ dirIsWritable("checker");
 fileIsWritable("checker");
 
 
+
+
+// you also can discreetly check your requirement...
+requirementStopStack();
+$myCustomExtesionExists=  extensionAvailable("myExtension"); // wont output
+// ...and loudely check again...
+requirementStackAgain();
+// and finally do conditional checking
+if($myCustomExtesionExists == true){
+    dirIsWritable("dir/that/matches/extension");
+}else{
+    dirIsWritable("./it/doesnt/exists"); // output again
+}
+
+
+
 // will render the requirement (html if browser, or CLI formatted if cli)
 renderAllRequirements();
 
@@ -37,3 +51,5 @@ renderAllRequirements();
 // $backup = resetRequirements(); // reset all requirements and returns a backup of the actual that can be loaded latter
 // echo countBadRequirements();   // this method returns how many requirements fail. It allows to use it as an API to just check how many requirements are missing
 // loadRequirements($bu);         // load some backed up requirements
+
+

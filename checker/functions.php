@@ -2,6 +2,8 @@
 
 $requirementsBag=array();
 $uniqueRequirementsBag=array();
+$doStackBag=true;
+
 
 /**
  * Add a requirement to the list of renders
@@ -11,7 +13,10 @@ $uniqueRequirementsBag=array();
  */
 function addRequirement($name,$works=false){
     global $requirementsBag;
-    $requirementsBag[]=array("works"=>$works,"name"=>$name);
+    global $doStackBag;
+    if($doStackBag)
+        $requirementsBag[]=array("works"=>$works,"name"=>$name);
+    
 }
 
 /**
@@ -32,9 +37,9 @@ function addRequirement($name,$works=false){
  */
 function addUniqueRequirement($key,$name,$works=false){
     global $uniqueRequirementsBag;
-    
-    $uniqueRequirementsBag[$key]=array("works"=>$works,"name"=>$name);
-    
+    global $doStackBag;
+    if($doStackBag)
+        $uniqueRequirementsBag[$key]=array("works"=>$works,"name"=>$name);
 }
 
 /**
@@ -181,6 +186,7 @@ function resetRequirements(){
     $uniqueRequirementsBag=array();
     $requirementsBag=array();
     
+    
     return $backup;
 }
 
@@ -200,6 +206,17 @@ function loadRequirements($bu){
         $requirementsBag=  array_merge($requirementsBag,$bu["others"]);
     }
 }
+
+function requirementStopStack(){
+    global $doStackBag;
+    $doStackBag=false;
+}
+
+function requirementStackAgain(){
+    global $doStackBag;
+    $doStackBag=true;
+}
+
 
 /**
  * Check php version
