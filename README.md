@@ -1,9 +1,10 @@
 check-requirement
 =================
 
-php helper to create a "checkRequirement" page for php application.
+Sometimes you need to transfert your website from one server to another. Or maybe you use to have a production version of your site and often you transfert this version from production to a new dev environnement. Then you need to check if new server meets the requirements. 
+That what this micro app is made for !
 
-It works with both Browser and CLI display.
+It works with both Browser and CLI display. But be aware of CLI mays output differents things due to the system user rights and configurations that are not the same for webserver and local user.
 
 
 Screenshots
