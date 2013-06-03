@@ -218,6 +218,11 @@ function requirementStackAgain(){
 }
 
 
+
+
+// CHECKERS
+
+
 /**
  * Check php version
  */
@@ -271,12 +276,16 @@ function extensionAvailable($name){
  * check if an apache module is enabled
  */
 function apacheModuleAvailable($name){
-    $moduleAvailable=in_array($name, apache_get_modules());
     
-    if($moduleAvailable)
-        addUniqueRequirement("1:APACHE:$name","Apache Module '".$name."' is available",true);
-    else
-        addUniqueRequirement("1:APACHE:$name","Apache Module '".$name."' is not available",false);
+    if(function_exists('apache_get_modules')){
+    
+        $moduleAvailable=in_array($name, apache_get_modules());
+
+        if($moduleAvailable)
+            addUniqueRequirement("1:APACHE:$name","Apache Module '".$name."' is available",true);
+        else
+            addUniqueRequirement("1:APACHE:$name","Apache Module '".$name."' is not available",false);
+    } // TODO maybe a way to achieve it from the cli ?
 }
 
 /**
