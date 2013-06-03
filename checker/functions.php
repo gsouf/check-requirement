@@ -139,6 +139,68 @@ function renderCli(){
     
 }
 
+
+/**
+ * returns the number of broken requirements
+ */
+function countBadRequirements(){
+    global $requirementsBag;
+    global $uniqueRequirementsBag;
+   
+    
+    $errors=0;
+    
+    foreach($uniqueRequirementsBag as $r){
+        if(true !== $r["works"]){
+            $errors++;
+        }
+        
+    }
+    
+    foreach($requirementsBag as $r){
+        if(true !== $r["works"]){
+            $errors++;
+        }
+    }
+    
+    return $errors;
+    
+}
+
+/**
+ * reset all requirements and returns actual requirements that you can load later with load reuqirements
+ */
+function resetRequirements(){
+    global $requirementsBag;
+    global $uniqueRequirementsBag;
+   
+    $backup=array();
+    $backup["unique"]=  $uniqueRequirementsBag;
+    $backup["others"]=  $requirementsBag;
+    
+    $uniqueRequirementsBag=array();
+    $requirementsBag=array();
+    
+    return $backup;
+}
+
+/**
+ * Load the given set of requirements
+ */
+function loadRequirements($bu){
+    
+    global $requirementsBag;
+    global $uniqueRequirementsBag;
+    
+    if(isset($bu["unique"])){
+        $uniqueRequirementsBag=  array_merge($uniqueRequirementsBag,$bu["unique"]);
+    }
+    
+    if(isset($bu["others"])){
+        $requirementsBag=  array_merge($requirementsBag,$bu["others"]);
+    }
+}
+
 /**
  * Check php version
  */
@@ -151,7 +213,7 @@ function phpNumberVersionIs($operator,$number){
         
         $number=  floatval($number);
         
-        
+        // floatval and in_array ensure the eval call. Be care if you modify this function
         eval("\$numberVersionIsOk=".$version.$operator.$number.";");
         
         
@@ -177,9 +239,9 @@ function extensionAvailable($name){
     $isLoaded=extension_loaded($name);
     
     if($isLoaded)
-        addUniqueRequirement("1:EXTENSION:$name","Extension ".$name.' was correctly loaded',true);
+        addUniqueRequirement("2:EXTENSION:$name","Extension '".$name."' was correctly loaded",true);
     else
-        addUniqueRequirement("1:EXTENSION:$name","Extension ".$name.' was not loaded',false);
+        addUniqueRequirement("2:EXTENSION:$name","Extension '".$name."' was not loaded",false);
     
         
     
@@ -195,9 +257,9 @@ function apacheModuleAvailable($name){
     $moduleAvailable=in_array($name, apache_get_modules());
     
     if($moduleAvailable)
-        addUniqueRequirement("2:APACHE:$name","Apache Module ".$name.' is available',true);
+        addUniqueRequirement("1:APACHE:$name","Apache Module '".$name."' is available",true);
     else
-        addUniqueRequirement("2:APACHE:$name","Apache Module ".$name.' is not available',false);
+        addUniqueRequirement("1:APACHE:$name","Apache Module '".$name."' is not available",false);
 }
 
 /**
